@@ -1,0 +1,23 @@
+{
+  "name": "osm-mcp-server",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/tpp6me/osm-mcp-server#readme",
+  "bugs": {
+    "url": "https://github.com/tpp6me/osm-mcp-server/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tpp6me/osm-mcp-server.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.10.2"
+  }
+}
