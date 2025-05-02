@@ -2,7 +2,8 @@
 const { Server } = require("@modelcontextprotocol/sdk/server/index.js");
 const { StdioServerTransport } = require("@modelcontextprotocol/sdk/server/stdio.js");
 //const fetch = require('node-fetch');
-
+const NOMINATIM_BASE_URL = "https://nominatim.openstreetmap.org";
+const OSRM_BASE_URL = "http://router.project-osrm.org/";
 
 const server = new Server(
   { name: "osm-mcp-server", version: "1.0.0" },
@@ -196,7 +197,7 @@ server.fallbackRequestHandler = async (request) => {
         console.error(`Reverse geocoding for lat: ${lat}, lon: ${lon}`);
 
         async function fetchAddress(lat, lon) {
-          const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`;
+          const url = `${NOMINATIM_BASE_URL}/reverse?format=json&lat=${lat}&lon=${lon}`;
           try {
             const response = await fetch(url);
             if (!response.ok) {
@@ -235,7 +236,7 @@ server.fallbackRequestHandler = async (request) => {
         console.error(`Geocoding for address: ${address}`);
 
         async function fetchCoordinates(address) {
-          const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`;
+          const url = `${NOMINATIM_BASE_URL}/search?format=json&q=${encodeURIComponent(address)}`;
           try {
             const response = await fetch(url);
             if (!response.ok) {
@@ -293,7 +294,7 @@ server.fallbackRequestHandler = async (request) => {
         console.error(`Calculating route distance for coordinates: (${lat1}, ${lon1}) to (${lat2}, ${lon2})`);
 
         async function fetchRouteDistance(lat1, lon1, lat2, lon2) {
-          const baseUrl = 'http://router.project-osrm.org/route/v1/driving';
+          const baseUrl = `${OSRM_BASE_URL}/route/v1/driving`;
           const url = `${baseUrl}/${lon1},${lat1};${lon2},${lat2}?overview=false`;
 
           try {
