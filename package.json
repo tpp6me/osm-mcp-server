@@ -1,7 +1,7 @@
 {
   "name": "osm-mcp-server",
-  "version": "1.0.0",
-  "description": "",
+  "version": "2.0.0",
+  "description": "MCP server for OpenStreetMap: geocoding, reverse geocoding, routing, POI search via Nominatim, OSRM and Overpass",
   "homepage": "https://github.com/tpp6me/osm-mcp-server#readme",
   "bugs": {
     "url": "https://github.com/tpp6me/osm-mcp-server/issues"
@@ -14,10 +14,18 @@
   "author": "",
   "type": "commonjs",
   "main": "index.js",
+  "bin": {
+    "osm-mcp-server": "./index.js"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "smoke": "node -e \"const {spawn}=require('child_process');const p=spawn('node',['index.js'],{stdio:['pipe','pipe','inherit']});let b='';p.stdout.on('data',d=>{b+=d;const lines=b.split('\\n');for(const l of lines){if(!l.trim())continue;try{const m=JSON.parse(l);if(m.id===1){console.log('TOOLS:',m.result.tools.map(t=>t.name).join(', '));p.kill();process.exit(0)}}catch{}}});p.stdin.write(JSON.stringify({jsonrpc:'2.0',id:1,method:'tools/list',params:{}})+'\\n');setTimeout(()=>{console.error('timeout');p.kill();process.exit(1)},15000);\""
+  },
+  "engines": {
+    "node": ">=20"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.10.2"
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "zod": "^4.6.1"
   }
 }

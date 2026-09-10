@@ -1,26 +1,41 @@
 # MCP Server for OSM
 ## Overview
 
-This is an MCP server for accessing some OSM functions. We will access nominatim functionality of geocoding and reverse geocoding and some of the distance APIs from OSRM. 
+This is an MCP server for accessing OSM functions: Nominatim (geocoding/reverse/lookup), OSRM (routing/matrix/trip) and Overpass (nearby POI search).
 
-Please note that these are open servers, use them lightly and fairly. For production usage consider installing you own servers and using them. The base urls are at the beginning of the file index.js
-
-This can be used as a simple started code to understand MCP servers. It gives implementations of APIs and also haversine distance a non-API implementation.
+Please note that these are open servers, use them lightly and fairly. For production usage consider installing your own servers and using them. Set custom endpoints via env vars (see below).
 
 ## Requirements
 
-It need Node version 20 and above
+Node 20+
 
-## Features
+`npm install`
 
-The following geo services are coded
+## Features (v2.0.0, 12 tools)
 
-1. Geocoding using Nominatim API. Sample prompt -Give coordinates of New York
-2. Reverse geocoding using Nominatim API. Sample prompt - Give address of (12.77, 78.32)
-3. Route distance between 2 points using OSRM. 
-4. Haversine distance between 2 points
+1. `geocode` – address → coords (top result, `limit`, `countrycodes`)
+2. `search_places` – query → up to 20 structured results
+3. `reverse_geocode` – lat/lon → address (`zoom` 0-18)
+4. `place_details` – OSM lookup by `osm_type` + `osm_id`
+5. `distanceWithHaversine` – straight-line distance (`km`/`mi`/`m`)
+6. `routeDistance` – OSRM distance (`driving`/`walking`/`cycling`)
+7. `route_details` – distance + duration + turn-by-turn steps
+8. `distance_matrix` – OSRM table for 2-10 points
+9. `optimize_trip` – OSRM trip (TSP) for 2-10 waypoints
+10. `find_nearby_places` – Overpass POIs: restaurant, cafe, hotel, fuel, atm, etc. within radius
+11. `get_map_link` – openstreetmap.org link for coords
+12. `about` – server info
 
-You can ask for the distance between San Jose and San Fransisco and the server will get the coordinates for both San Jose and San Fransisco and get the straight distance and route distance.
+Sample prompts: "Give coordinates of New York", "Coffee shops within 1km of (12.97, 77.59)?", "Optimize a trip visiting A, B, C", "Driving route Berlin → Potsdam with steps?".
+
+## Env vars
+
+```
+NOMINATIM_BASE_URL=https://nominatim.openstreetmap.org
+OSRM_BASE_URL=https://router.project-osrm.org
+OVERPASS_BASE_URL=https://overpass-api.de/api/interpreter
+NOMINATIM_EMAIL=you@example.com   # optional, for large usage
+```
 
 ## Installation
 
