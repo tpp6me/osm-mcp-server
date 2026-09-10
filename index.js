@@ -4,6 +4,9 @@ const { StdioServerTransport } = require("@modelcontextprotocol/sdk/server/stdio
 //const fetch = require('node-fetch');
 const NOMINATIM_BASE_URL = "https://nominatim.openstreetmap.org";
 const OSRM_BASE_URL = "http://router.project-osrm.org/";
+const HTTP_HEADERS = {
+  "User-Agent": "osm-mcp-server/1.0 (MCP server for Nominatim and OSRM)",
+};
 
 const server = new Server(
   { name: "osm-mcp-server", version: "1.0.0" },
@@ -199,7 +202,7 @@ server.fallbackRequestHandler = async (request) => {
         async function fetchAddress(lat, lon) {
           const url = `${NOMINATIM_BASE_URL}/reverse?format=json&lat=${lat}&lon=${lon}`;
           try {
-            const response = await fetch(url);
+            const response = await fetch(url, { headers: HTTP_HEADERS });
             if (!response.ok) {
               throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -238,7 +241,7 @@ server.fallbackRequestHandler = async (request) => {
         async function fetchCoordinates(address) {
           const url = `${NOMINATIM_BASE_URL}/search?format=json&q=${encodeURIComponent(address)}`;
           try {
-            const response = await fetch(url);
+            const response = await fetch(url, { headers: HTTP_HEADERS });
             if (!response.ok) {
               throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -298,7 +301,7 @@ server.fallbackRequestHandler = async (request) => {
           const url = `${baseUrl}/${lon1},${lat1};${lon2},${lat2}?overview=false`;
 
           try {
-            const response = await fetch(url);
+            const response = await fetch(url, { headers: HTTP_HEADERS });
             if (!response.ok) {
               throw new Error(`HTTP error! status: ${response.status}`);
             }
